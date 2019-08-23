@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Document</title>
+  <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.js"></script>
+</head>
+<body>
+  <label>用户名：</label>
+  <input type="text" id="username"/>
+  <label>密码：</label>
+  <input type="text" id="password"/>
+  <button id="btn1">登录</button>
+  <button id="btn2">获取信息</button>
+  <button id="btn3">注销</button>
+  <script>
+    $(document).ready(function(){
+      $('#btn1').click((e) => {
+        var username = $("#username").val();
+        var password = $("#password").val();
+        $.ajax({
+            type: 'GET',
+            async: true,
+            url : '/web/login',
+            data : `username=${username}&password=${password}`,
+            headers: {
+              token: window.localStorage.tokens || ""
+            },
+            dataType : 'json',
+            success : function(data){
+              console.log(data);
+              if(data.code == 200){
+                window.localStorage.tokens = data.token;
+              }
+            },
+            error : function(xhr, errorData){
+
+            }
+        })
+      })
+      $('#btn2').click((e) => {
+        $.ajax({
+            type: 'GET',
+            async: true,
+            url : '/web/getUser',
+            data : 'data=data',
+            headers: {
+              token: window.localStorage.tokens
+            },
+            dataType : 'json',
+            success : function(data){
+              console.log(data);
+              // window.localStorage.tokens = ''
+            },
+            error : function(xhr, errorData){
+
+            }
+        })
+      })
+      $('#btn3').click((e) => {
+        $.ajax({
+            type: 'GET',
+            async: true,
+            url : '/web/logout',
+            data : 'username=abcd&password=123456',
+            headers: {
+              token: window.localStorage.tokens
+            },
+            dataType : 'json',
+            success : function(data){
+              console.log(data);
+              // window.localStorage.tokens = ''
+            },
+            error : function(xhr, errorData){
+
+            }
+        })
+      })
+    })
+  </script>
+</body>
+</html>
